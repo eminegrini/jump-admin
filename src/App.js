@@ -1,20 +1,17 @@
 import './assets/css/App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import {} from 'react-router-dom';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import RTLLayout from './layouts/rtl';
-import {
-  ChakraProvider,
-  // extendTheme
-} from '@chakra-ui/react';
-import initialTheme from './theme/theme'; //  { themeGreen }
+import { ChakraProvider } from '@chakra-ui/react';
+import initialTheme from './theme/theme';
 import { useState } from 'react';
-// Chakra imports
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function Main() {
-  // eslint-disable-next-line
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
+  const isAuthenticated = false;
+
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
@@ -22,15 +19,19 @@ export default function Main() {
         <Route
           path="admin/*"
           element={
-            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            </ProtectedRoute>
           }
         />
-        <Route
+        {/*         <Route
           path="rtl/*"
           element={
-            <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            </ProtectedRoute>
           }
-        />
+        /> */}
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
     </ChakraProvider>
